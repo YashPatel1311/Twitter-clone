@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
+var cookieParser = require('cookie-parser')
 var cors = require('cors')
+require('./Handlers/passport');
 
 
 require('dotenv/config');
@@ -26,37 +28,34 @@ const start = async() => {
 
     const app = express();
 
-    // Middleware
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
 
+    //  Express session
     app.use(session({
         secret: 'anything',
-        resave: true,
-        saveUninitialized: true,
-        cookie: {
-            secure: false
-        }
+        resave: false,
+        saveUninitialized: false,
+        cookie: { maxAge: 60 * 60 * 1000 },
     }));
-
-
-
 
     // Passport.js
     app.use(passport.initialize());
     app.use(passport.session());
 
-    passport.serializeUser(User.serializeUser());
-    passport.deserializeUser(User.deserializeUser());
 
-    const LocalStrategy = require('passport-local').Strategy;
-    passport.use(new LocalStrategy(User.authenticate()));
+    // Body Parser
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+
 
     // Cors
     var allowedOrigins = ['http://127.0.0.1:5500'];
-
     app.use(cors({ origin: allowedOrigins, credentials: true }))
 
+
+    app.use((req, res, next) => {
+        res.locals.user = req.user || null;
+        next();
+    });
 
     // Routes
     app.use('/', routes)

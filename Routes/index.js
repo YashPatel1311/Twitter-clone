@@ -3,6 +3,7 @@ let router = express.Router()
 const User = require('../Models/User')
 const passport = require('passport')
 
+
 // Helper function to implement unfollow
 Array.prototype.remove = function() {
     var what, a = arguments,
@@ -20,8 +21,6 @@ Array.prototype.remove = function() {
 // Register Logic
 router.post('/register', async function(req, res) {
 
-    console.log(req);
-
     UserObj = new User({
         email: req.body.email,
         username: req.body.username,
@@ -30,25 +29,15 @@ router.post('/register', async function(req, res) {
         website: req.body.website
     });
 
-    console.log(req.body);
 
 
     User.register(UserObj, req.body.password, function(err, user) {
         if (err) {
-            console.log(err);
             return res.json({ success: false });
         } else {
-            return res.json({ success: true });
+            return res.redirect("http://127.0.0.1:5500/home.html");
         }
 
-        // const { user } = await DefaultUser.authenticate()('user', 'password');
-
-        //   User.register(UserObj, req.body.password, function(err, user) {
-        //     if (err) {
-        //       res.json({success:false, message:"Your account could not be saved. Error: ", err}) 
-        //     }else{
-        //       res.json({success: true, message: "Your account has been saved"})
-        //     }
     });
 });
 
@@ -66,7 +55,18 @@ router.post('/login',
 // UserA follows UserB
 router.post('/follow', async(req, res) => {
 
-    console.log(req.session);
+    // console.log(req);
+    // console.log(req.sessionStore.sessions.passport);
+    // console.log('Cookies: ', req.cookies)
+
+    // Cookies that have been signed
+    // console.log('Signed Cookies: ', req.signedCookies)
+
+    console.log("Body in follow: ");
+    console.log(req.body);
+
+    console.log("User in req: ");
+    console.log(req.user);
 
     let userA = req.user;
 
@@ -100,12 +100,15 @@ router.post('/unfollow', async(req, res) => {
 
 
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
+function isLoggedIn(req, res) {
+    if (!req.isAuthenticated()) {
+        res.redirect('http://127.0.0.1:5500/index.html');
     }
-    res.redirect("http://127.0.0.1:5500/index.html");
+
+    return true;
+
 }
+
 
 
 
