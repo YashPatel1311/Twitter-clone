@@ -2,10 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const passport = require('passport');
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
 var cors = require('cors')
-require('./Handlers/passport');
 
 
 require('dotenv/config');
@@ -29,17 +27,22 @@ const start = async() => {
     const app = express();
 
 
+
+
+
     //  Express session
+    app.use(cookieParser());
     app.use(session({
-        secret: 'anything',
+        name: 'session',
+        secret: "0",
         resave: false,
         saveUninitialized: false,
         cookie: { maxAge: 60 * 60 * 1000 },
     }));
 
     // Passport.js
-    app.use(passport.initialize());
-    app.use(passport.session());
+    // app.use(passport.initialize());
+    // app.use(passport.session());
 
 
     // Body Parser

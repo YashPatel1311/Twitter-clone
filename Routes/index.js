@@ -1,7 +1,7 @@
 const express = require('express')
 let router = express.Router()
 const User = require('../Models/User')
-const passport = require('passport')
+
 
 
 // Helper function to implement unfollow
@@ -21,46 +21,79 @@ Array.prototype.remove = function() {
 // Register Logic
 router.post('/register', async function(req, res) {
 
-    UserObj = new User({
+    userObj = new User({
         email: req.body.email,
         username: req.body.username,
         name: req.body.name,
         bio: req.body.bio,
-        website: req.body.website
+        website: req.body.website,
+        password: req.body.password
     });
 
 
+    try {
+        await userObj.save();
+        req.session.user = JSON.stringify(userObj);
+        console.log(req.session);
+        res.redirect("http://127.0.0.1:5500/home.html");
+    } catch (err) {
 
-    User.register(UserObj, req.body.password, function(err, user) {
-        if (err) {
-            return res.json({ success: false });
-        } else {
-            return res.redirect("http://127.0.0.1:5500/home.html");
-        }
+        res.redirect("http://127.0.0.1:5500/index.html");
+    }
 
-    });
+    // User.register(UserObj, req.body.password, function(err, user) {
+    //     if (err) {
+    //         return res.json({ success: false });
+    //     } else {
+    //         return res.redirect("http://127.0.0.1:5500/home.html");
+    //     }
+
+    // });
 });
 
 
 // Login Logic
-router.post('/login',
-    passport.authenticate('local', {
-        successRedirect: 'http://127.0.0.1:5500/home.html',
-        failureRedirect: 'http://127.0.0.1:5500/index.html'
-    })
-);
+router.post('/login', async(req, res) => {
+
+    try {
+        const userObj = await User.findOne({ username: req.body.username });
+
+        if (userObj.password === req.body.password) {
+            req.session.user = JSON.stringify(userObj);
+            console.log(req.session);
+            res.redirect("http://127.0.0.1:5500/home.html");
+        } else {
+            res.redirect("http://127.0.0.1:5500/index.html");
+        }
+    } catch (err) {
+        res.redirect("http://127.0.0.1:5500/index.html");
+    }
+
+
+});
+
+
+
+
+
+router.post('/logout', async(req, res) => {
+
+    localStorage.setItem('user', {});
+    res.redirect("http://127.0.0.1:5500/index.html")
+
+});
+
+
+
+
+
 
 
 // Logic to implement follow functionality
 // UserA follows UserB
 router.post('/follow', async(req, res) => {
 
-    // console.log(req);
-    // console.log(req.sessionStore.sessions.passport);
-    // console.log('Cookies: ', req.cookies)
-
-    // Cookies that have been signed
-    // console.log('Signed Cookies: ', req.signedCookies)
+    console.log(req);
 
     console.log("Body in follow: ");
     console.log(req.body);
