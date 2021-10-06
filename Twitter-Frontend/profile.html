@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="icon" href="" type="image" sizes="16x16">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="new.scss">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .container {
+    padding: 5em 0em;
+}
+
+.image-upload{  
+    float: right;
+    margin-top: 23px !important;
+    margin-bottom: -300px !important;
+    height: 263px;
+    width: 315px;
+}
+
+.footer {
+    position: fixed !important;
+    /* background: #E6E6E6 !important; */
+    background: white !important;
+    bottom: 0px;
+    height: 75px;
+    width: 100%;
+}
+
+.save-button{
+    position: fixed;
+    right: 10px;
+    bottom: 12px;
+}
+
+.cancel-button{
+    position: fixed;
+    right: 125px;
+    bottom: 12px;
+}
+    </style>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">-->
+</head>
+
+<body>
+    <!-- NAV -->
+    <!--Start: Nav  -->
+    <div class="ui fixed borderless huge menu ">
+
+        <div class="ui container grid">
+            <div class="computer only row">
+                <div>
+
+                    <a class="header item" style="background-color: #35A2F4; color: white;">
+                        <i class="twitter icon" style="background-color: #35A2F4; color: white;"></i>MINI TWITTER
+                    </a>
+                </div>
+                <div class="right menu">
+                    <a class="active item">Home</a>
+                    <a class="item">Explore</a>
+                    <a class="item">Logout</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End: Nav  -->
+
+    <!-- NAV -->
+
+
+
+
+    <!-- HOME  -->
+    <div class="ui text container">
+  
+        <h1 class="ui header">Welcome, </h1>  
+      <form class="ui form">
+           <div class="ui image-upload segment">
+            <center>
+              <i style="color: white;" class="large user icon"></i>
+              <p></p>
+                <i style="" class="massive user icon"></i>
+                <p></p>
+                <i style="color: white;" class="large user icon"></i>
+<p></p>
+                <a class="ui mini button">Remove</a>
+                <a class="ui mini twitter button">Upload</a>
+            </center>
+          </div>
+        <div class="eight wide field">
+          <label>First Name</label>
+          <input type="text" name="first-name" placeholder="First Name">
+        </div>
+        <div class="eight wide field">
+          <label>Last Name</label>
+          <input type="text" name="last-name" placeholder="Last Name">
+        </div>
+        
+          <div class="eight wide field">
+          <label>Phone Number</label>
+          <input type="number" name="last-name" placeholder="Phone Number">
+        </div>
+        
+            <div class="eight wide field">
+          <label>Email Address</label>
+          <input type="number" name="last-name" placeholder="test@gmail.com">
+        </div>
+        
+        <div class="four wide field">
+          <label>Birth Date</label>
+          <input type="date" name="last-name">
+        </div>
+      
+      
+      </form>
+      </div>
+      
+      
+       <div class="ui fixed inverted vertical footer segment">
+        <a  class="ui huge cancel-button button">
+          Cancel
+        </a>
+        <button  class="ui huge save-button twitter button">
+          Save
+        </button>
+       </div>  
+      
+      
+      <div class="ui basic modal">
+            <div class="ui active">
+              <div class="ui large text loader">Just one sec, we're updating your agenda!</div>
+            </div>
+        </div>
+      </div>
+      
+    <!-- END: HOME  -->
+    <script src="main.js"></script>
+    <script>
+        async function postData(url = '', data = {}) {
+            // Default options are marked with *
+            const response = await fetch(url, {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+
+                credentials: 'include', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                redirect: 'follow', // manual, *follow, error
+                body: JSON.stringify(data) // body data type must match "Content-Type" header
+            });
+            return response.json(); // parses JSON response into native JavaScript objects
+        }
+
+        postData('http://127.0.0.1:5000/follow', {
+                username: "1"
+            })
+            .then(data => {
+                console.log(data); // JSON data parsed by `data.json()` call
+            });
+    </script>
+
+
+
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js "></script>
+
+    </body>
+
+
+
+</html>
